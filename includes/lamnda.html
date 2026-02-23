@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AWS Lambda with Container</title>
+</head>
+<body>
+  <h1>AWS Lambda with Container Example</h1>
+
+  <div id="lambda-container"></div>
+
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+  <script>
+    // Configure the AWS SDK
+    AWS.config.region = 'your-aws-region';
+    AWS.config.credentials = new AWS.Credentials('your-access-key', 'your-secret-key');
+
+    // Create an AWS Lambda object
+    var lambda = new AWS.Lambda();
+
+    // Define the parameters for the Lambda function
+    var params = {
+      FunctionName: 'your-lambda-function-name',
+      InvocationType: 'RequestResponse',
+      LogType: 'Tail',
+      Payload: JSON.stringify({ /* your payload data */ })
+    };
+
+    // Invoke the Lambda function
+    lambda.invoke(params, function(err, data) {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        console.log(data);
+        var result = JSON.parse(data.Payload);
+        document.getElementById('lambda-container').innerHTML = result.message;
+      }
+    });
+  </script>
+</body>
+</html>
